@@ -43,9 +43,9 @@ This repository contains configuration files and documentation to set up HAProxy
 ### Installation and Configuration
 1. HAProxy Setup
 
-    Install HAProxy:
+Install HAProxy:
 
-sudo apt-get install haproxy
+    sudo apt-get install haproxy
 
 Copy the provided haproxy.cfg file from the respective site directory (site_a/ or site_b/) to /etc/haproxy/haproxy.cfg.
 Restart HAProxy:
@@ -54,9 +54,9 @@ Restart HAProxy:
 
 2. Keepalived Setup
 
-    Install Keepalived:
+Install Keepalived:
 
-sudo apt-get install keepalived
+    sudo apt-get install keepalived
 
 Copy the keepalived.conf file from the respective site directory to /etc/keepalived/keepalived.conf.
 Restart Keepalived:
@@ -68,7 +68,7 @@ Restart Keepalived:
 Local Failover: Shut down one HAProxy node in a site and verify that traffic is redirected to the backup node using the local VIP.
 Site-Wide Failover: Simulate a complete site failure by shutting down all nodes in one site. Confirm traffic is redirected to the second site via global VIP.
 
-### Contributing
+## Contributing
 
 We welcome contributions to improve these configurations. To contribute:
 
