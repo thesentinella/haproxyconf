@@ -50,7 +50,7 @@ Vagrant.configure("2") do |config|
       balance roundrobin
       server web01 192.168.56.12:80 check
       server web02 192.168.56.13:80 check
-  EOL
+EOL
   
         systemctl restart haproxy
       SHELL
@@ -98,7 +98,7 @@ Vagrant.configure("2") do |config|
       balance roundrobin
       server web01 192.168.56.12:80 check
       server web02 192.168.56.13:80 check
-  EOL
+EOL
   
         systemctl restart haproxy
       SHELL
