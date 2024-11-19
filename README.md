@@ -26,6 +26,7 @@ This repository contains configuration files and documentation to set up HAProxy
 ├── global_failover/
 │   ├── global_vip_guide.md # Instructions for configuring a global VIP
 └── README.md               # This README file
+```
 
 ## Requirements
 
