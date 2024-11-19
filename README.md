@@ -65,21 +65,21 @@ Restart Keepalived:
 
 ## Testing the Configuration
 
-    Local Failover: Shut down one HAProxy node in a site and verify that traffic is redirected to the backup node using the local VIP.
-    Site-Wide Failover: Simulate a complete site failure by shutting down all nodes in one site. Confirm traffic is redirected to the second site via global VIP.
+Local Failover: Shut down one HAProxy node in a site and verify that traffic is redirected to the backup node using the local VIP.
+Site-Wide Failover: Simulate a complete site failure by shutting down all nodes in one site. Confirm traffic is redirected to the second site via global VIP.
 
 ### Contributing
 
 We welcome contributions to improve these configurations. To contribute:
 
-    Fork this repository.
-    Create a feature branch.
-    Submit a pull request with detailed explanations of changes.
+Fork this repository.
+Create a feature branch.
+Submit a pull request with detailed explanations of changes.
 
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
 Resources
 
-    [HAProxy Documentation](https://docs.haproxy.org)
-    [Keepalived Documentation](https://keepalived.readthedocs.io/en/latest/)
+[HAProxy Documentation](https://docs.haproxy.org)
+[Keepalived Documentation](https://keepalived.readthedocs.io/en/latest/)
