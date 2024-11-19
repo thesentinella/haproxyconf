@@ -8,7 +8,6 @@ This repository contains configuration files and documentation to set up HAProxy
 
 - **High Availability**: Ensure uptime with automatic failover between HAProxy nodes within a site.
 - **Multi-Site Failover**: Handle site-wide failures with a global failover mechanism.
-- **DNS Integration**: Optional DNS failover for traffic redirection between sites.
 - **Scalable Design**: Supports Docker Swarm nodes and other backend architectures.
 - **Customizable**: Configurations are modular and can be adapted to your environment.
 
@@ -25,7 +24,6 @@ This repository contains configuration files and documentation to set up HAProxy
 │   ├── haproxy.cfg         # HAProxy configuration for Site B
 │   ├── keepalived.conf     # Keepalived configuration for Site B
 ├── global_failover/
-│   ├── dns_failover.md     # Guide for setting up DNS-based failover
 │   ├── global_vip_guide.md # Instructions for configuring a global VIP
 └── README.md               # This README file
 
@@ -35,7 +33,6 @@ This repository contains configuration files and documentation to set up HAProxy
 
     HAProxy (v2.0 or higher)
     Keepalived (v2.0 or higher)
-    Optional: DNS provider with failover support (e.g., Amazon Route 53, Cloudflare)
 
 ### Hardware
 
@@ -65,15 +62,10 @@ Restart Keepalived:
 
     sudo systemctl restart keepalived
 
-3. Global Failover
-
-    For DNS-based failover, follow the instructions in global_failover/dns_failover.md.
-    For global VIP configuration, refer to global_failover/global_vip_guide.md.
-
 ## Testing the Configuration
 
     Local Failover: Shut down one HAProxy node in a site and verify that traffic is redirected to the backup node using the local VIP.
-    Site-Wide Failover: Simulate a complete site failure by shutting down all nodes in one site. Confirm traffic is redirected to the second site via DNS or global VIP.
+    Site-Wide Failover: Simulate a complete site failure by shutting down all nodes in one site. Confirm traffic is redirected to the second site via global VIP.
 
 ### Contributing
 
