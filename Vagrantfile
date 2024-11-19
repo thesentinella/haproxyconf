@@ -103,6 +103,54 @@ EOL
         systemctl restart haproxy
       SHELL
     end
+
+    # Load Balancer 3
+    config.vm.define "lb03" do |lb02|
+      lb02.vm.box = "bento/ubuntu-24.04"
+      lb02.vm.hostname = "lb03"
+      lb02.vm.network "private_network", ip: "192.168.56.14"
+      lb02.vm.provider "virtualbox" do |vb|
+        vb.memory = 1024
+        vb.cpus = 1
+      end
+      lb02.vm.provision "shell", inline: <<-SHELL
+        apt-get update
+        apt-get install -y haproxy
+        sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
+        echo "#{hosts_entries}" >> /etc/hosts
+        # HAProxy configuration
+        cat <<EOL > /etc/haproxy/haproxy.cfg
+  global
+      log /dev/log local0
+      log /dev/log local1 notice
+      chroot /var/lib/haproxy
+      stats socket /run/haproxy/admin.sock mode 660 level admin
+      stats timeout 30s
+      user haproxy
+      group haproxy
+      daemon
+  
+  defaults
+      log     global
+      option  httplog
+      option  dontlognull
+      timeout connect 5000ms
+      timeout client  50000ms
+      timeout server  50000ms
+  
+  frontend http_front
+      bind *:80
+      default_backend web_servers
+  
+  backend web_servers
+      balance roundrobin
+      server web01 192.168.56.12:80 check
+      server web02 192.168.56.13:80 check
+EOL
+  
+        systemctl restart haproxy
+      SHELL
+    end
   
     # Web Server 1
     config.vm.define "web01" do |web01|
@@ -144,5 +192,26 @@ EOL
       SHELL
     end
   
-  end
   
+  # Web Server 3
+  config.vm.define "web03" do |web03|
+    web03.vm.box = "bento/ubuntu-24.04"
+    web03.vm.hostname = "web03"
+    web03.vm.network "private_network", ip: "192.168.56.20"
+    web03.vm.provider "virtualbox" do |vb|
+      vb.memory = 1024
+      vb.cpus = 1
+    end
+    web03.vm.provision "shell", inline: <<-SHELL
+      apt-get update
+      apt-get install -y nginx
+      systemctl enable nginx
+      systemctl restart nginx
+
+      echo "<h3>3</h3>" >> /var/www/html/index.nginx-debian.html
+      echo "#{hosts_entries}" >> /etc/hosts
+    SHELL
+  end
+    
+  end
+    
