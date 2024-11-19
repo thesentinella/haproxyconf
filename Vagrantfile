@@ -139,7 +139,7 @@ Vagrant.configure("2") do |config|
         systemctl enable nginx
         systemctl restart nginx
   
-        echo "<h3>1</h3>" >> /var/www/html/index.nginx-debian.html
+        echo "<h3>2</h3>" >> /var/www/html/index.nginx-debian.html
         echo "#{hosts_entries}" >> /etc/hosts
       SHELL
     end
