@@ -79,7 +79,8 @@ Submit a pull request with detailed explanations of changes.
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
-Resources
 
-[HAProxy Documentation](https://docs.haproxy.org)
-[Keepalived Documentation](https://keepalived.readthedocs.io/en/latest/)
+## Resources
+
+- [HAProxy Documentation](https://docs.haproxy.org)
+- [Keepalived Documentation](https://keepalived.readthedocs.io/en/latest/)
