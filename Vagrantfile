@@ -24,32 +24,50 @@ Vagrant.configure("2") do |config|
         echo "#{hosts_entries}" >> /etc/hosts
         # HAProxy configuration
         cat <<EOL > /etc/haproxy/haproxy.cfg
-  global
-      log /dev/log local0
-      log /dev/log local1 notice
-      chroot /var/lib/haproxy
-      stats socket /run/haproxy/admin.sock mode 660 level admin
-      stats timeout 30s
-      user haproxy
-      group haproxy
-      daemon
-  
-  defaults
-      log     global
-      option  httplog
-      option  dontlognull
-      timeout connect 5000ms
-      timeout client  50000ms
-      timeout server  50000ms
-  
-  frontend http_front
-      bind *:80
-      default_backend web_servers
-  
-  backend web_servers
-      balance roundrobin
-      server web01 192.168.56.12:80 check
-      server web02 192.168.56.13:80 check
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    retries 3
+    timeout http-request 10s
+    timeout queue        1m
+    timeout connect      10s
+    timeout client       1m
+    timeout server       1m
+    timeout http-keep-alive 10s
+    timeout check        10s
+    maxconn 3000
+
+frontend http_front
+    bind *:80
+      # Define ACLs based on Host header
+    acl host_app1 hdr(host) -i app1.example.com
+    acl host_app2 hdr(host) -i app2.example.com
+
+    # Use backends based on the ACLs
+    use_backend app1_backend if host_app1
+    use_backend app2_backend if host_app2
+
+backend app1_backend
+    balance roundrobin
+    server web01 192.168.56.12:80 check
+    server web02 192.168.56.13:80 check
+
+backend app2_backend
+    balance roundrobin
+    server web01 192.168.56.12:8080 check
+    server web02 192.168.56.13:8080 check
 EOL
   
         systemctl restart haproxy
@@ -72,32 +90,50 @@ EOL
         echo "#{hosts_entries}" >> /etc/hosts
         # HAProxy configuration
         cat <<EOL > /etc/haproxy/haproxy.cfg
-  global
-      log /dev/log local0
-      log /dev/log local1 notice
-      chroot /var/lib/haproxy
-      stats socket /run/haproxy/admin.sock mode 660 level admin
-      stats timeout 30s
-      user haproxy
-      group haproxy
-      daemon
-  
-  defaults
-      log     global
-      option  httplog
-      option  dontlognull
-      timeout connect 5000ms
-      timeout client  50000ms
-      timeout server  50000ms
-  
-  frontend http_front
-      bind *:80
-      default_backend web_servers
-  
-  backend web_servers
-      balance roundrobin
-      server web01 192.168.56.12:80 check
-      server web02 192.168.56.13:80 check
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    retries 3
+    timeout http-request 10s
+    timeout queue        1m
+    timeout connect      10s
+    timeout client       1m
+    timeout server       1m
+    timeout http-keep-alive 10s
+    timeout check        10s
+    maxconn 3000
+
+frontend http_front
+    bind *:80
+      # Define ACLs based on Host header
+    acl host_app1 hdr(host) -i app1.example.com
+    acl host_app2 hdr(host) -i app2.example.com
+
+    # Use backends based on the ACLs
+    use_backend app1_backend if host_app1
+    use_backend app2_backend if host_app2
+
+backend app1_backend
+    balance roundrobin
+    server web01 192.168.56.12:80 check
+    server web02 192.168.56.13:80 check
+
+backend app2_backend
+    balance roundrobin
+    server web01 192.168.56.12:8080 check
+    server web02 192.168.56.13:8080 check
 EOL
   
         systemctl restart haproxy
@@ -120,32 +156,49 @@ EOL
         echo "#{hosts_entries}" >> /etc/hosts
         # HAProxy configuration
         cat <<EOL > /etc/haproxy/haproxy.cfg
-  global
-      log /dev/log local0
-      log /dev/log local1 notice
-      chroot /var/lib/haproxy
-      stats socket /run/haproxy/admin.sock mode 660 level admin
-      stats timeout 30s
-      user haproxy
-      group haproxy
-      daemon
-  
-  defaults
-      log     global
-      option  httplog
-      option  dontlognull
-      timeout connect 5000ms
-      timeout client  50000ms
-      timeout server  50000ms
-  
-  frontend http_front
-      bind *:80
-      default_backend web_servers
-  
-  backend web_servers
-      balance roundrobin
-      server web01 192.168.56.12:80 check
-      server web02 192.168.56.13:80 check
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
+
+    defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    retries 3
+    timeout http-request 10s
+    timeout queue        1m
+    timeout connect      10s
+    timeout client       1m
+    timeout server       1m
+    timeout http-keep-alive 10s
+    timeout check        10s
+    maxconn 3000
+frontend http_front
+    bind *:80
+      # Define ACLs based on Host header
+    acl host_app1 hdr(host) -i app1.example.com
+    acl host_app2 hdr(host) -i app2.example.com
+
+    # Use backends based on the ACLs
+    use_backend app1_backend if host_app1
+    use_backend app2_backend if host_app2
+
+backend app1_backend
+    balance roundrobin
+    server web01 192.168.56.12:80 check
+    server web02 192.168.56.13:80 check
+
+backend app2_backend
+    balance roundrobin
+    server web01 192.168.56.12:8080 check
+    server web02 192.168.56.13:8080 check
 EOL
   
         systemctl restart haproxy
@@ -162,15 +215,31 @@ EOL
         vb.cpus = 1
       end
       web01.vm.provision "shell", inline: <<-SHELL
-        apt-get update
-        apt-get install -y nginx
-        systemctl enable nginx
-        systemctl restart nginx
-  
-        echo "<h3>1</h3>" >> /var/www/html/index.nginx-debian.html
-        echo "#{hosts_entries}" >> /etc/hosts
-      SHELL
-    end
+      apt-get update
+      apt-get install -y nginx
+      systemctl enable nginx
+      systemctl restart nginx
+
+      echo "<h3>1</h3>" >> /var/www/html/index.nginx-debian.html
+        # Create a new configuration for port 8080
+    cat <<EOL > /etc/nginx/sites-available/8080
+    server {
+        listen 8080;
+        root /var/www/8080;
+        index index.html;
+    }
+EOL
+
+    # Enable the new site
+    mkdir -p /var/www/8080
+    echo "<h3>Page for Port 8080</h3>" > /var/www/8080/index.html
+    ln -s /etc/nginx/sites-available/8080 /etc/nginx/sites-enabled/8080
+
+    echo "#{hosts_entries}" >> /etc/hosts
+    systemctl restart nginx
+      
+    SHELL
+  end
   
     # Web Server 2
     config.vm.define "web02" do |web02|
@@ -182,15 +251,31 @@ EOL
         vb.cpus = 1
       end
       web02.vm.provision "shell", inline: <<-SHELL
-        apt-get update
-        apt-get install -y nginx
-        systemctl enable nginx
-        systemctl restart nginx
-  
-        echo "<h3>2</h3>" >> /var/www/html/index.nginx-debian.html
-        echo "#{hosts_entries}" >> /etc/hosts
-      SHELL
-    end
+      apt-get update
+      apt-get install -y nginx
+      systemctl enable nginx
+      systemctl restart nginx
+
+      echo "<h3>2</h3>" >> /var/www/html/index.nginx-debian.html
+        # Create a new configuration for port 8080
+    cat <<EOL > /etc/nginx/sites-available/8080
+    server {
+        listen 8080;
+        root /var/www/8080;
+        index index.html;
+    }
+EOL
+
+    # Enable the new site
+    mkdir -p /var/www/8080
+    echo "<h3>Page for Port 8080</h3>" > /var/www/8080/index.html
+    ln -s /etc/nginx/sites-available/8080 /etc/nginx/sites-enabled/8080
+
+    echo "#{hosts_entries}" >> /etc/hosts
+    systemctl restart nginx
+      
+    SHELL
+  end
   
   
   # Web Server 3
@@ -209,7 +294,23 @@ EOL
       systemctl restart nginx
 
       echo "<h3>3</h3>" >> /var/www/html/index.nginx-debian.html
-      echo "#{hosts_entries}" >> /etc/hosts
+        # Create a new configuration for port 8080
+    cat <<EOL > /etc/nginx/sites-available/8080
+    server {
+        listen 8080;
+        root /var/www/8080;
+        index index.html;
+    }
+EOL
+
+    # Enable the new site
+    mkdir -p /var/www/8080
+    echo "<h3>Page for Port 8080</h3>" > /var/www/8080/index.html
+    ln -s /etc/nginx/sites-available/8080 /etc/nginx/sites-enabled/8080
+
+    echo "#{hosts_entries}" >> /etc/hosts
+    systemctl restart nginx
+      
     SHELL
   end
     
